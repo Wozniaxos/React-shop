@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 
 import withAuthorization from './withAuthorization'
 import { db } from '../firebase'
+import UserList from './UserList'
 
 class HomePage extends Component {
   state = { users: null }
@@ -23,24 +23,6 @@ class HomePage extends Component {
       </div>
     )
   }
-}
-
-const UserList = ({ users }) => (
-  <div>
-    <h2>List of Usernames of Users</h2>
-    <p>(Saved on Sign Up in Firebase Database)</p>
-
-    {Object.keys(users).map(key => <div key={key}>{users[key].username}</div>)}
-  </div>
-)
-
-UserList.propTypes = {
-  users: PropTypes.objectOf(
-    PropTypes.shape({
-      email: PropTypes.string.isRequired,
-      username: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
 }
 
 const authCondition = authUser => !!authUser
