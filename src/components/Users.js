@@ -1,18 +1,19 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { compose } from 'recompose'
 
 import withAuthorization from './withAuthorization'
 import { db } from '../firebase'
 import UserList from './UserList'
 
 class Users extends Component {
-  state = { users: null }
-
   componentDidMount() {
-    db.onceGetUsers().then(snapshot => this.setState({ users: snapshot.val() }))
+    const { onSetUsers } = this.props
+    db.onceGetUsers().then(snapshot => onSetUsers(snapshot.val()))
   }
 
   render() {
-    const { users } = this.state
+    const { users } = this.props
 
     return (
       <div>
@@ -25,6 +26,17 @@ class Users extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  users: state.users.all,
+})
+
+const mapDispatchToProps = dispatch => ({
+  onSetUsers: users => dispatch({ type: 'USERS_SET', users }),
+})
+
 const authCondition = authUser => !!authUser
 
-export default withAuthorization(authCondition)(Users)
+export default compose(
+  withAuthorization(authCondition),
+  connect(mapStateToProps, mapDispatchToProps),
+)(Users)
