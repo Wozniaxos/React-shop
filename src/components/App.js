@@ -20,13 +20,13 @@ const App = () => (
 
       <hr />
 
-      <Route component={() => <LandingPage />} exact path={routes.LANDING} />
-      <Route component={() => <SignUpPage />} exact path={routes.SIGN_UP} />
-      <Route component={() => <SignInPage />} exact path={routes.SIGN_IN} />
-      <Route component={() => <PasswordForgetPage />} exact path={routes.PASSWORD_FORGET} />
-      <Route component={() => <HomePage />} exact path={routes.HOME} />
-      <Route component={() => <AccountPage />} exact path={routes.ACCOUNT} />
-      <Route component={() => <Users />} exact path={routes.USERS} />
+      <Route component={LandingPage} exact path={routes.LANDING} />
+      <Route component={SignUpPage} exact path={routes.SIGN_UP} />
+      <Route component={SignInPage} exact path={routes.SIGN_IN} />
+      <Route component={PasswordForgetPage} exact path={routes.PASSWORD_FORGET} />
+      <Route component={HomePage} exact path={routes.HOME} />
+      <Route component={AccountPage} exact path={routes.ACCOUNT} />
+      <Route component={Users} exact path={routes.USERS} />
     </div>
   </Router>
 )

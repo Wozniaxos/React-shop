@@ -19,7 +19,7 @@ class Users extends Component {
         <h1>Home</h1>
         <p>The Home Page is accessible by every signed in user.</p>
 
-        {!!users && <UserList users={users} />}
+        {Object.keys(users).length > 0 && <UserList users={users} />}
       </div>
     )
   }
