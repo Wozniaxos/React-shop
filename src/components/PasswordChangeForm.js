@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { auth } from '../firebase'
+import { validatePasswordCompatibility, validateFields } from '../utils/validator'
 
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
@@ -13,12 +14,9 @@ const INITIAL_STATE = {
 }
 
 class PasswordChangeForm extends Component {
-  constructor(props) {
-    super(props)
-    this.state = { ...INITIAL_STATE }
-  }
+  state = { ...INITIAL_STATE }
 
-  onSubmit(event) {
+  onSubmit = event => {
     const { passwordOne } = this.state
 
     auth
@@ -36,10 +34,14 @@ class PasswordChangeForm extends Component {
   render() {
     const { passwordOne, passwordTwo, error } = this.state
 
-    const isInvalid = passwordOne !== passwordTwo || passwordOne === ''
+    const validFields = validateFields({
+      password: passwordOne,
+    })
+
+    const isInvalid = !validFields || !validatePasswordCompatibility(passwordOne, passwordTwo)
 
     return (
-      <form onSubmit={this.onSubmit.bind(this)}>
+      <form onSubmit={this.onSubmit}>
         <input
           onChange={event => this.setState(byPropKey('passwordOne', event.target.value))}
           placeholder="New Password"

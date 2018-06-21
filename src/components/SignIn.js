@@ -1,10 +1,9 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { withRouter } from 'react-router-dom'
 
-import { SignUpLink } from './SignUp'
-import { auth } from '../firebase'
-import { PasswordForgetLink } from './PasswordForget'
-import * as routes from '../constants/routes'
+import SignUpLink from './SignUpLink'
+import PasswordForgetLink from './PasswordForgetLink'
+import SignInForm from './SignInForm'
 
 const SignInPage = ({ history }) => (
   <div>
@@ -15,68 +14,4 @@ const SignInPage = ({ history }) => (
   </div>
 )
 
-const byPropKey = (propertyName, value) => () => ({
-  [propertyName]: value,
-})
-
-const INITIAL_STATE = {
-  email: '',
-  password: '',
-  error: null,
-}
-
-class SignInForm extends Component {
-  constructor(props) {
-    super(props)
-    this.state = { ...INITIAL_STATE }
-  }
-
-  onSubmit(event) {
-    const { email, password } = this.state
-    const { history } = this.props
-
-    auth
-      .doSignInWithEmailAndPassword(email, password)
-      .then(() => {
-        this.setState(() => ({ ...INITIAL_STATE }))
-        history.push(routes.HOME)
-      })
-      .catch(error => {
-        this.setState(byPropKey('error', error))
-      })
-
-    event.preventDefault()
-  }
-
-  render() {
-    const { email, password, error } = this.state
-
-    const isInvalid = password === '' || email === ''
-
-    return (
-      <form onSubmit={this.onSubmit.bind(this)}>
-        <input
-          onChange={event => this.setState(byPropKey('email', event.target.value))}
-          placeholder="Email Address"
-          type="text"
-          value={email}
-        />
-        <input
-          onChange={event => this.setState(byPropKey('password', event.target.value))}
-          placeholder="Password"
-          type="password"
-          value={password}
-        />
-        <button disabled={isInvalid} type="submit">
-          Sign In
-        </button>
-
-        {error && <p>{error.message}</p>}
-      </form>
-    )
-  }
-}
-
 export default withRouter(SignInPage)
-
-export { SignInForm }
