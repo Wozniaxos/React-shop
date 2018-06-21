@@ -1,7 +1,7 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import firebase from 'firebase/app'
+import 'firebase/auth'
 
-require('dotenv').config();
+require('dotenv').config()
 
 const prodConfig = {
   apiKey: process.env.REACT_APP_PROD_API_KEY,
@@ -10,7 +10,7 @@ const prodConfig = {
   projectId: process.env.REACT_APP_PROD_PROJECT_ID,
   storageBucket: process.env.REACT_APP_PROD_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_PROD_MESSAGING_SENDER_ID,
-};
+}
 
 const devConfig = {
   apiKey: process.env.REACT_APP_DEV_API_KEY,
@@ -19,16 +19,14 @@ const devConfig = {
   projectId: process.env.REACT_APP_DEV_PROJECT_ID,
   storageBucket: process.env.REACT_APP_DEV_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_DEV_MESSAGING_SENDER_ID,
-};
-
-const config = process.env.NODE_ENV === 'production'
-  ? prodConfig
-  : devConfig;
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(config);
 }
 
-const auth = firebase.auth();
+const config = process.env.NODE_ENV === 'production' ? prodConfig : devConfig
 
-export default auth;
+if (!firebase.apps.length) {
+  firebase.initializeApp(config)
+}
+
+const auth = firebase.auth()
+
+export default auth
