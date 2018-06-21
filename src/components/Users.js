@@ -4,7 +4,7 @@ import withAuthorization from './withAuthorization'
 import { db } from '../firebase'
 import UserList from './UserList'
 
-class HomePage extends Component {
+class Users extends Component {
   state = { users: null }
 
   componentDidMount() {
@@ -27,4 +27,4 @@ class HomePage extends Component {
 
 const authCondition = authUser => !!authUser
 
-export default withAuthorization(authCondition)(HomePage)
+export default withAuthorization(authCondition)(Users)

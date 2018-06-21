@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { auth } from '../firebase'
+import { auth, db } from '../firebase'
 import { HOME } from '../constants/routes'
 import { validateFields, validatePasswordCompatibility } from '../utils/validator'
 
@@ -26,13 +26,19 @@ export default class SignUpForm extends Component {
     auth
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
-        this.setState(() => ({ ...INITIAL_STATE }))
-        history.push(HOME)
+        db
+          .doCreateUser(authUser.user.uid, username, email)
+          .then(() => {
+            this.setState({ ...INITIAL_STATE })
+            history.push(HOME)
+          })
+          .catch(error => {
+            this.setState(byPropKey('error', error))
+          })
       })
       .catch(error => {
         this.setState(byPropKey('error', error))
       })
-
     event.preventDefault()
   }
 
