@@ -1,13 +1,16 @@
-import React from 'react'
-
+import React, { Component } from 'react'
 import withAuthorization from './withAuthorization'
 
-const HomePage = () => (
-  <div>
-    <h1>Home Page</h1>
-    <p>The Home Page is accessible by every signed in user.</p>
-  </div>
-)
+class HomePage extends Component {
+  render() {
+    return (
+      <div>
+        <h1>Home</h1>
+        <p>Here will be the store with side bars etc</p>
+      </div>
+    )
+  }
+}
 
 const authCondition = authUser => !!authUser
 
