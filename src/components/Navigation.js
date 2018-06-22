@@ -1,12 +1,14 @@
 import React from 'react'
-import AuthUserContext from './AuthUserContext'
 import NavigationAuth from './NavigationAuth'
 import NavigationNonAuth from './NavigationNonAuth'
+import { connect } from 'react-redux'
 
-const Navigation = () => (
-  <AuthUserContext.Consumer>
-    {authUser => (authUser ? <NavigationAuth /> : <NavigationNonAuth />)}
-  </AuthUserContext.Consumer>
+const Navigation = ({ authUser }) => (
+  <div> {authUser ? <NavigationAuth /> : <NavigationNonAuth />} </div>
 )
 
-export default Navigation
+const mapStateToProps = state => ({
+  authUser: state.session.authUser,
+})
+
+export default connect(mapStateToProps)(Navigation)
