@@ -4,6 +4,7 @@ import { compose } from 'recompose'
 
 import withAuthorization from './withAuthorization'
 import { db } from '../firebase'
+import { setUsers } from '../store/users/actions'
 import UserList from './UserList'
 
 class Users extends Component {
@@ -30,9 +31,9 @@ const mapStateToProps = state => ({
   users: state.users.all,
 })
 
-const mapDispatchToProps = dispatch => ({
-  onSetUsers: users => dispatch({ type: 'USERS_SET', users }),
-})
+const mapDispatchToProps = {
+  onSetUsers: setUsers,
+}
 
 const authCondition = authUser => !!authUser
 
