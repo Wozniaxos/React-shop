@@ -27,7 +27,11 @@ export default class SignUpForm extends Component {
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
         db
-          .doCreateUser(authUser.user.uid, username, email)
+          .create('User', {
+            id: authUser.user.uid,
+            username,
+            email,
+          })
           .then(() => {
             this.setState({ ...INITIAL_STATE })
             history.push(HOME)
