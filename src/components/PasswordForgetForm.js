@@ -2,17 +2,25 @@ import React, { Component } from 'react'
 import { auth } from '../firebase'
 import { validateFields } from '../utils/validator'
 
-const byPropKey = (propertyName, value) => () => ({
-  [propertyName]: value,
-})
-
 const INITIAL_STATE = {
   email: '',
+  isInvalid: true,
   error: null,
 }
 
 export default class PasswordForgetForm extends Component {
-  state = { ...INITIAL_STATE }
+  state = INITIAL_STATE
+
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value }, () => {
+      const { email } = this.state
+
+      const isInvalid = !validateFields({
+        email,
+      })
+      this.setState({ isInvalid })
+    })
+  }
 
   onSubmit = event => {
     const { email } = this.state
@@ -20,29 +28,26 @@ export default class PasswordForgetForm extends Component {
     auth
       .doPasswordReset(email)
       .then(() => {
-        this.setState(() => ({ ...INITIAL_STATE }))
+        this.setState(INITIAL_STATE)
       })
       .catch(error => {
-        this.setState(byPropKey('error', error))
+        this.setState({ error })
       })
 
     event.preventDefault()
   }
 
   render() {
-    const { email, error } = this.state
-
-    const isInvalid = !validateFields({
-      email,
-    })
+    const { email, error, isInvalid } = this.state
 
     return (
       <form onSubmit={this.onSubmit}>
         <input
-          onChange={event => this.setState(byPropKey('email', event.target.value))}
+          name="email"
+          onChange={this.handleChange}
           placeholder="Email Address"
           type="text"
-          value={this.state.email}
+          value={email}
         />
         <button disabled={isInvalid} type="submit">
           Reset My Password

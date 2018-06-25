@@ -17,8 +17,8 @@ const ProductList = ({ highlighted, list, products, highlight }) => (
         <h2>Edit Form</h2>
         <ProductEditForm highlight={highlight} product={highlighted} />
         <DeleteButton
-          callback={highlight}
-          callbackParams={null}
+          afterDelete={highlight}
+          afterDeleteParams={null}
           entity={'Product'}
           itemId={highlighted.id}
         />

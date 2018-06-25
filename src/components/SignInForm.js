@@ -3,18 +3,27 @@ import { auth } from '../firebase'
 import { HOME } from '../constants/routes'
 import { validateFields } from '../utils/validator'
 
-const byPropKey = (propertyName, value) => () => ({
-  [propertyName]: value,
-})
-
 const INITIAL_STATE = {
   email: '',
   password: '',
+  isInvalid: true,
   error: null,
 }
 
 export default class SignInForm extends Component {
-  state = { ...INITIAL_STATE }
+  state = INITIAL_STATE
+
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value }, () => {
+      const { email, password } = this.state
+
+      const isInvalid = !validateFields({
+        password,
+        email,
+      })
+      this.setState({ isInvalid })
+    })
+  }
 
   onSubmit = event => {
     const { email, password } = this.state
@@ -23,34 +32,31 @@ export default class SignInForm extends Component {
     auth
       .doSignInWithEmailAndPassword(email, password)
       .then(() => {
-        this.setState({ ...INITIAL_STATE })
+        this.setState(INITIAL_STATE)
         history.push(HOME)
       })
       .catch(error => {
-        this.setState(byPropKey('error', error))
+        this.setState({ error })
       })
 
     event.preventDefault()
   }
 
   render() {
-    const { email, password, error } = this.state
-
-    const isInvalid = !validateFields({
-      password,
-      email,
-    })
+    const { email, password, isInvalid, error } = this.state
 
     return (
       <form onSubmit={this.onSubmit}>
         <input
-          onChange={event => this.setState(byPropKey('email', event.target.value))}
+          name="email"
+          onChange={this.handleChange}
           placeholder="Email Address"
           type="text"
           value={email}
         />
         <input
-          onChange={event => this.setState(byPropKey('password', event.target.value))}
+          name="password"
+          onChange={this.handleChange}
           placeholder="Password"
           type="password"
           value={password}

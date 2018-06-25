@@ -2,41 +2,48 @@ import React, { Component } from 'react'
 import { validateFields } from '../utils/validator'
 import { db } from '../firebase'
 
-const byPropKey = (propertyName, value) => () => ({
-  [propertyName]: value,
-})
-
 const INITIAL_STATE = {
   name: '',
+  isInvalid: true,
   error: null,
 }
 
 export default class ProductAddForm extends Component {
-  state = { ...INITIAL_STATE }
+  state = INITIAL_STATE
+
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value }, () => {
+      const { name } = this.state
+
+      const isInvalid = !validateFields({
+        name,
+      })
+      this.setState({ isInvalid })
+    })
+  }
 
   onSubmit = event => {
     const { name } = this.state
-    db.create('Product', {
-      name,
-    })
-    this.setState({ ...INITIAL_STATE })
+    db
+      .create('Product', {
+        name,
+      })
+      .catch(error => this.setState({ error }))
+    this.setState(INITIAL_STATE)
     event.preventDefault()
   }
 
   render() {
-    const { name, error } = this.state
-
-    const isInvalid = !validateFields({
-      name,
-    })
+    const { name, isInvalid, error } = this.state
 
     return (
       <form onSubmit={this.onSubmit}>
         <input
-          onChange={event => this.setState(byPropKey('name', event.target.value))}
+          name="name"
+          onChange={this.handleChange}
           placeholder="Product Name"
           type="text"
-          value={this.state.name}
+          value={name}
         />
         <button disabled={isInvalid} type="submit">
           Add product
