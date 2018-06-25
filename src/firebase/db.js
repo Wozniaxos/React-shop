@@ -25,7 +25,7 @@ export const destroy = (entity, params) => {
   return db.ref(`${entityPath}/${id}`).set(null)
 }
 
-export const handleChangesFor = (entity, handler) =>
+export const fetchAndHandleChangesFor = (entity, handler) =>
   db.ref(`${entity}s`.toLowerCase()).on('value', handler)
 
 export const handleInitialLoadFor = entity => db.ref(`${entity}s`.toLowerCase()).once('value')
