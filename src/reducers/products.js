@@ -1,3 +1,5 @@
+import { PRODUCTS_SET, PRODUCT_HIGHLIGHT } from '../store/products/actions'
+
 const INITIAL_STATE = {
   byId: {},
   list: [],
@@ -17,10 +19,10 @@ const applyHighlightProduct = (state, action) => ({
 
 function products(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case 'PRODUCTS_SET': {
+    case PRODUCTS_SET: {
       return applySetProducts(state, action)
     }
-    case 'PRODUCT_HIGHLIGHT': {
+    case PRODUCT_HIGHLIGHT: {
       return applyHighlightProduct(state, action)
     }
     default:

@@ -1,3 +1,5 @@
+import { USERS_SET } from '../store/users/actions'
+
 const INITIAL_STATE = {
   all: {},
 }
@@ -9,7 +11,7 @@ const applySetUsers = (state, action) => ({
 
 function users(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case 'USERS_SET': {
+    case USERS_SET: {
       return applySetUsers(state, action)
     }
     default:
