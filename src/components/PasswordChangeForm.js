@@ -13,10 +13,10 @@ const INITIAL_STATE = {
 class PasswordChangeForm extends Component {
   state = INITIAL_STATE
 
-  handleChange = event => {
-    const { passwordOne, passwordTwo } = this.state
+  handleChange = ({ target: { name, value } }) => {
+    this.setState({ [name]: value }, () => {
+      const { passwordOne, passwordTwo } = this.state
 
-    this.setState({ [event.target.name]: event.target.value }, () => {
       const validFields = validateFields({
         password: passwordOne,
       })

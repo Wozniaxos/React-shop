@@ -15,8 +15,8 @@ const INITIAL_STATE = {
 export default class SignUpForm extends Component {
   state = INITIAL_STATE
 
-  handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value }, () => {
+  handleChange = ({ target: { name, value } }) => {
+    this.setState({ [name]: value }, () => {
       const { username, email, passwordOne, passwordTwo } = this.state
 
       const validFields = validateFields({
