@@ -6,6 +6,7 @@ import withAuthorization from './withAuthorization'
 import { db } from '../firebase'
 import ProductList from './ProductList'
 import ProductAddForm from './ProductAddForm'
+import { setProducts } from '../store/products/actions'
 
 class Products extends Component {
   componentDidMount() {
@@ -14,13 +15,15 @@ class Products extends Component {
   }
 
   render() {
-    const { products } = this.props
+    const { highlighted, productList, products } = this.props
 
     return (
       <div>
         <h1>Products</h1>
 
-        {Object.keys(products).length > 0 && <ProductList products={products} />}
+        {productList.length > 0 && (
+          <ProductList highlighted={highlighted} list={productList} products={products} />
+        )}
         <ProductAddForm />
       </div>
     )
@@ -28,12 +31,14 @@ class Products extends Component {
 }
 
 const mapStateToProps = state => ({
-  products: state.products.all,
+  productList: state.products.list,
+  products: state.products.byId,
+  highlighted: state.products.highlighted,
 })
 
-const mapDispatchToProps = dispatch => ({
-  onSetProducts: products => dispatch({ type: 'PRODUCTS_SET', products }),
-})
+const mapDispatchToProps = {
+  onSetProducts: setProducts,
+}
 
 const authCondition = authUser => !!authUser
 
