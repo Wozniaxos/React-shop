@@ -16,7 +16,12 @@ const ProductList = ({ highlighted, list, products, highlight }) => (
       <div>
         <h2>Edit Form</h2>
         <ProductEditForm highlight={highlight} product={highlighted} />
-        <DeleteButton afterDelete={highlight} afterDeleteParams={null} entity={'Product'} />
+        <DeleteButton
+          afterDelete={highlight}
+          afterDeleteParams={null}
+          entity={'Product'}
+          item={highlighted}
+        />
       </div>
     )}
   </div>
