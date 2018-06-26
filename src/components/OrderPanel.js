@@ -30,12 +30,12 @@ class OrderPanel extends Component {
     const { productList, orderListItems, products, orderItems } = this.props
 
     return (
-      <div>
-        <div>
-          <h1>Products</h1>
+      <div className="order-panel">
+        <div className="order-list">
+          <h2>Add products to order</h2>
           {productList.length > 0 && <OrderList list={productList} products={products} />}
         </div>
-        <div>
+        <div className="order-sidebar">
           {orderListItems.length > 0 && (
             <OrderSideBar items={orderItems} itemsList={orderListItems} />
           )}
