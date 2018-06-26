@@ -7,8 +7,8 @@ const INITIAL_STATE = {
 
 const applySetOrderItems = (state, action) => ({
   ...state,
-  byId: action.orderItems,
-  list: Object.keys(action.orderItems),
+  byId: action.items,
+  list: Object.keys(action.items),
 })
 
 function order(state = INITIAL_STATE, action) {

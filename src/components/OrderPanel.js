@@ -23,7 +23,9 @@ class OrderPanel extends Component {
           {productList.length > 0 && <OrderList list={productList} products={products} />}
         </div>
         <div>
-          <OrderSideBar items={orderItems} itemsList={orderItemsList} />
+          {orderItemsList.length > 0 && (
+            <OrderSideBar items={orderItems} itemsList={orderItemsList} />
+          )}
         </div>
       </div>
     )
