@@ -11,17 +11,12 @@ const ProductList = ({ highlighted, list, products, highlight }) => (
     <h2>List of Products</h2>
     <p>Products fetched from DB</p>
 
-    {list.map(key => <Product highlight={highlight} id={key} key={key} product={products[key]} />)}
+    {list.map(key => <Product highlight={highlight} key={key} product={products[key]} />)}
     {highlighted && (
       <div>
         <h2>Edit Form</h2>
         <ProductEditForm highlight={highlight} product={highlighted} />
-        <DeleteButton
-          afterDelete={highlight}
-          afterDeleteParams={null}
-          entity={'Product'}
-          itemId={highlighted.id}
-        />
+        <DeleteButton afterDelete={highlight} afterDeleteParams={null} entity={'Product'} />
       </div>
     )}
   </div>

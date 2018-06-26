@@ -16,7 +16,6 @@ const withAuthentication = Component => {
         if (authUser) {
           db.handleInitialLoadFor('User').then(users => {
             const currentUser = users.val()[authUser.uid]
-            debugger
             setCurrent(currentUser)
           })
         }

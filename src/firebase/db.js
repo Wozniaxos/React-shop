@@ -4,10 +4,9 @@ export const create = (entity, params) => {
   const entityPath = `${entity}s`.toLowerCase()
   const { id } = params
   if (!id) {
-    return db
-      .ref(`${entityPath}`)
-      .push()
-      .set(params)
+    const createdId = initializeKey(entity)
+    params['id'] = createdId
+    return db.ref(`${entityPath}/${createdId}`).set(params)
   } else {
     return db.ref(`${entityPath}/${id}`).set(params)
   }
@@ -27,5 +26,7 @@ export const destroy = (entity, params) => {
 
 export const fetchAndHandleChangesFor = (entity, handler) =>
   db.ref(`${entity}s`.toLowerCase()).on('value', handler)
+
+export const initializeKey = entity => db.ref(`${entity}s`.toLowerCase()).push().key
 
 export const handleInitialLoadFor = entity => db.ref(`${entity}s`.toLowerCase()).once('value')

@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 
 export default class Product extends PureComponent {
   handleclick = () => {
-    const { highlight, product, id } = this.props
-    product.id = id
+    const { highlight, product } = this.props
     highlight(product)
   }
 
@@ -16,8 +15,8 @@ export default class Product extends PureComponent {
 
 Product.propTypes = {
   product: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }),
   highlight: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired,
 }
