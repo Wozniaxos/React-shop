@@ -4,6 +4,7 @@ import { db } from '../firebase'
 
 const INITIAL_STATE = {
   name: '',
+  price: '',
   isInvalid: true,
   error: null,
 }
@@ -13,21 +14,23 @@ export default class ProductEditForm extends PureComponent {
 
   handleChange = ({ target: { name, value } }) => {
     this.setState({ [name]: value }, () => {
-      const { name } = this.state
+      const { name, price } = this.state
 
       const isInvalid = !validateFields({
         name,
+        number: price,
       })
       this.setState({ isInvalid })
     })
   }
 
   onSubmit = event => {
-    const { name } = this.state
+    const { name, price } = this.state
     const { product, highlight } = this.props
     const payload = {
       id: product.id,
       name,
+      price,
     }
     db
       .update('Product', payload)
@@ -38,7 +41,7 @@ export default class ProductEditForm extends PureComponent {
   }
 
   render() {
-    const { name, isInvalid, error } = this.state
+    const { name, price, isInvalid, error } = this.state
 
     return (
       <div>
@@ -50,6 +53,13 @@ export default class ProductEditForm extends PureComponent {
             placeholder="Product Name"
             type="text"
             value={name}
+          />
+          <input
+            name="price"
+            onChange={this.handleChange}
+            placeholder="Product Price"
+            type="text"
+            value={price}
           />
           <button disabled={isInvalid} type="submit">
             Save Edit

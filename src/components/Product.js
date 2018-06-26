@@ -9,7 +9,11 @@ export default class Product extends PureComponent {
 
   render() {
     const { product } = this.props
-    return <div onClick={this.handleclick}> {product.name} </div>
+    return (
+      <div onClick={this.handleclick}>
+        {product.name} {product.price} zł
+      </div>
+    )
   }
 }
 
