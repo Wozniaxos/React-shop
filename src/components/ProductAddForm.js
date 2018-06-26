@@ -1,56 +1,52 @@
 import React, { Component } from 'react'
-import { auth } from '../firebase'
 import { validateFields } from '../utils/validator'
+import { db } from '../firebase'
 
 const INITIAL_STATE = {
-  email: '',
+  name: '',
   isInvalid: true,
   error: null,
 }
 
-export default class PasswordForgetForm extends Component {
+export default class ProductAddForm extends Component {
   state = INITIAL_STATE
 
   handleChange = ({ target: { name, value } }) => {
     this.setState({ [name]: value }, () => {
-      const { email } = this.state
+      const { name } = this.state
 
       const isInvalid = !validateFields({
-        email,
+        name,
       })
       this.setState({ isInvalid })
     })
   }
 
   onSubmit = event => {
-    const { email } = this.state
-
-    auth
-      .doPasswordReset(email)
-      .then(() => {
-        this.setState(INITIAL_STATE)
+    const { name } = this.state
+    db
+      .create('Product', {
+        name,
       })
-      .catch(error => {
-        this.setState({ error })
-      })
-
+      .catch(error => this.setState({ error }))
+    this.setState(INITIAL_STATE)
     event.preventDefault()
   }
 
   render() {
-    const { email, error, isInvalid } = this.state
+    const { name, isInvalid, error } = this.state
 
     return (
       <form onSubmit={this.onSubmit}>
         <input
-          name="email"
+          name="name"
           onChange={this.handleChange}
-          placeholder="Email Address"
+          placeholder="Product Name"
           type="text"
-          value={email}
+          value={name}
         />
         <button disabled={isInvalid} type="submit">
-          Reset My Password
+          Add product
         </button>
 
         {error && <p>{error.message}</p>}

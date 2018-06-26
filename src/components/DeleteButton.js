@@ -1,0 +1,17 @@
+import React, { PureComponent } from 'react'
+import { db } from '../firebase'
+
+export default class DeleteButton extends PureComponent {
+  deleteItem = event => {
+    const { itemId, afterDelete, entity, afterDeleteParams } = this.props
+    db
+      .destroy(entity, {
+        id: itemId,
+      })
+      .then(() => afterDelete(afterDeleteParams))
+    event.preventDefault()
+  }
+  render() {
+    return <button onClick={this.deleteItem}> Delete </button>
+  }
+}

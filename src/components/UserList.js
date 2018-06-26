@@ -16,7 +16,7 @@ UserList.propTypes = {
       email: PropTypes.string.isRequired,
       username: PropTypes.string.isRequired,
     }),
-  ),
+  ).isRequired,
 }
 
 export default UserList

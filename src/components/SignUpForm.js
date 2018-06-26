@@ -8,16 +8,26 @@ const INITIAL_STATE = {
   email: '',
   passwordOne: '',
   passwordTwo: '',
+  isInvalid: true,
   error: null,
-  validatedForm: null,
 }
 
-const byPropKey = (propertyName, value) => () => ({
-  [propertyName]: value,
-})
-
 export default class SignUpForm extends Component {
-  state = { ...INITIAL_STATE }
+  state = INITIAL_STATE
+
+  handleChange = ({ target: { name, value } }) => {
+    this.setState({ [name]: value }, () => {
+      const { username, email, passwordOne, passwordTwo } = this.state
+
+      const validFields = validateFields({
+        password: passwordOne,
+        email,
+        name: username,
+      })
+      let isInvalid = !validFields || !validatePasswordCompatibility(passwordOne, passwordTwo)
+      this.setState({ isInvalid })
+    })
+  }
 
   onSubmit = event => {
     const { username, email, passwordOne } = this.state
@@ -25,56 +35,51 @@ export default class SignUpForm extends Component {
 
     auth
       .doCreateUserWithEmailAndPassword(email, passwordOne)
-      .then(authUser => {
-        db
-          .doCreateUser(authUser.user.uid, username, email)
-          .then(() => {
-            this.setState({ ...INITIAL_STATE })
-            history.push(HOME)
-          })
-          .catch(error => {
-            this.setState(byPropKey('error', error))
-          })
+      .then(authUser =>
+        db.create('User', {
+          id: authUser.user.uid,
+          username,
+          email,
+        }),
+      )
+      .then(() => {
+        this.setState(INITIAL_STATE)
+        history.push(HOME)
       })
       .catch(error => {
-        this.setState(byPropKey('error', error))
+        this.setState({ error })
       })
     event.preventDefault()
   }
 
   render() {
-    const { username, email, passwordOne, passwordTwo, error } = this.state
-
-    const validFields = validateFields({
-      password: passwordOne,
-      email,
-      name: username,
-    })
-
-    let isInvalid = !validFields || !validatePasswordCompatibility(passwordOne, passwordTwo)
-
+    const { username, email, passwordOne, passwordTwo, isInvalid, error } = this.state
     return (
       <form onSubmit={this.onSubmit}>
         <input
-          onChange={event => this.setState(byPropKey('username', event.target.value))}
+          name="username"
+          onChange={this.handleChange}
           placeholder="Full Name"
           type="text"
           value={username}
         />
         <input
-          onChange={event => this.setState(byPropKey('email', event.target.value))}
+          name="email"
+          onChange={this.handleChange}
           placeholder="Email Address"
           type="text"
           value={email}
         />
         <input
-          onChange={event => this.setState(byPropKey('passwordOne', event.target.value))}
+          name="passwordOne"
+          onChange={this.handleChange}
           placeholder="Password"
           type="password"
           value={passwordOne}
         />
         <input
-          onChange={event => this.setState(byPropKey('passwordTwo', event.target.value))}
+          name="passwordTwo"
+          onChange={this.handleChange}
           placeholder="Confirm Password"
           type="password"
           value={passwordTwo}
