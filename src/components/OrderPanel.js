@@ -7,14 +7,27 @@ import { connect } from 'react-redux'
 import { db } from '../firebase'
 
 class OrderPanel extends Component {
+  fetchCurrentUserOrder = orders => {
+    const { currentUser } = this.props
+    if (currentUser.order) {
+      return orders[currentUser.order]
+    }
+  }
+
   componentDidMount() {
-    const { onSetProducts, onSetOrderItems } = this.props
-    db.fetchAndHandleChangesFor('Product', snapshot => onSetProducts(snapshot.val() || {}))
-    db.fetchAndHandleChangesFor('Order', snapshot => onSetOrderItems(snapshot.val() || {}))
+    const { setProducts, setOrderItems } = this.props
+    db.fetchAndHandleChangesFor('Product', snapshot => setProducts(snapshot.val() || {}))
+    db.fetchAndHandleChangesFor('Order', snapshot => {
+      const orders = snapshot.val()
+      if (orders) {
+        const userOrder = this.fetchCurrentUserOrder(orders)
+        userOrder ? setOrderItems(userOrder.items || {}) : setOrderItems({})
+      }
+    })
   }
 
   render() {
-    const { productList, orderItemsList, products, orderItems } = this.props
+    const { productList, orderListItems, products, orderItems } = this.props
 
     return (
       <div>
@@ -23,8 +36,8 @@ class OrderPanel extends Component {
           {productList.length > 0 && <OrderList list={productList} products={products} />}
         </div>
         <div>
-          {orderItemsList.length > 0 && (
-            <OrderSideBar items={orderItems} itemsList={orderItemsList} />
+          {orderListItems.length > 0 && (
+            <OrderSideBar items={orderItems} itemsList={orderListItems} />
           )}
         </div>
       </div>
@@ -35,13 +48,14 @@ class OrderPanel extends Component {
 const mapStateToProps = state => ({
   productList: state.products.list,
   products: state.products.byId,
-  orderItemsList: state.order.list,
-  orderItems: state.order.byId,
+  orderListItems: state.order.orderListItems,
+  orderItems: state.order.orderItemsById,
+  currentUser: state.users.currentUser,
 })
 
 const mapDispatchToProps = {
-  onSetProducts: setProducts,
-  onSetOrderItems: setOrderItems,
+  setProducts,
+  setOrderItems,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderPanel)
