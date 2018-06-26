@@ -12,12 +12,14 @@ const withAuthentication = Component => {
       const { onAuthChange, setCurrent } = this.props
 
       auth.onAuthStateChanged(authUser => {
-        onAuthChange(authUser || null)
         if (authUser) {
           db.handleInitialLoadFor('User').then(users => {
             const currentUser = users.val()[authUser.uid]
             setCurrent(currentUser)
+            onAuthChange(authUser)
           })
+        } else {
+          onAuthChange(null)
         }
       })
     }
