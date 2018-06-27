@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-class OrderRow extends PureComponent {
+export class OrderRow extends PureComponent {
   state = { amount: 1 }
   increaseAmount = () => {
     this.setState({ amount: this.state.amount + 1 })
@@ -20,7 +20,9 @@ class OrderRow extends PureComponent {
       <div className="order-row">
         {AmountComponent ? (
           <div>
-            {item.name} {item.price} zł
+            <p className="row-item-info">
+              {item.name} {item.price} zł
+            </p>
             <AmountComponent
               amount={amount}
               decrease={this.decreaseAmount}
@@ -29,7 +31,9 @@ class OrderRow extends PureComponent {
           </div>
         ) : (
           <div>
-            {item.amount}x {item.name} {item.price} zł
+            <p className="row-item-info">
+              {item.amount}x {item.name} {item.price} zł
+            </p>
           </div>
         )}
         <ButtonComponent
@@ -50,11 +54,17 @@ const mapStateToProps = state => ({
 
 OrderRow.propTypes = {
   item: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
   }),
   ButtonComponent: PropTypes.func.isRequired,
   AmountComponent: PropTypes.func,
-  currentUser: PropTypes.object.isRequired,
+  currentUser: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+  }),
   orderItems: PropTypes.object.isRequired,
 }
 
