@@ -10,6 +10,7 @@ import HomePage from './Home'
 import AccountPage from './Account'
 import Users from './Users'
 import Products from './Products'
+import NoMatch from './NoMatch'
 import withAuthentication from './withAuthentication'
 
 import * as routes from '../constants/routes'
@@ -29,6 +30,7 @@ const App = () => (
       <Route component={AccountPage} exact path={routes.ACCOUNT} />
       <Route component={Users} exact path={routes.USERS} />
       <Route component={Products} exact path={routes.PRODUCTS} />
+      <Route component={NoMatch} />
     </div>
   </Router>
 )
