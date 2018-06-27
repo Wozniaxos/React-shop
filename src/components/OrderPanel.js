@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { db } from '../firebase'
 
 class OrderPanel extends Component {
-  fetchCurrentUserOrder = orders => {
+  getCurrentUserOrder = orders => {
     const { currentUser } = this.props
     if (currentUser.order) {
       return orders[currentUser.order]
@@ -20,7 +20,7 @@ class OrderPanel extends Component {
     db.fetchAndHandleChangesFor('Order', snapshot => {
       const orders = snapshot.val()
       if (orders) {
-        const userOrder = this.fetchCurrentUserOrder(orders)
+        const userOrder = this.getCurrentUserOrder(orders)
         userOrder ? setOrderItems(userOrder.items || {}) : setOrderItems({})
       }
     })

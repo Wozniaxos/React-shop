@@ -14,6 +14,7 @@ export default class Product extends PureComponent {
   }
   render() {
     const { item, ButtonComponent, AmountComponent } = this.props
+    const { amount } = this.state
     return (
       <div className="order-row">
         {AmountComponent ? (
@@ -30,7 +31,7 @@ export default class Product extends PureComponent {
             {item.amount}x {item.name} {item.price} zł
           </div>
         )}
-        <ButtonComponent amount={this.state.amount} item={item} />
+        <ButtonComponent amount={amount} item={item} />
       </div>
     )
   }

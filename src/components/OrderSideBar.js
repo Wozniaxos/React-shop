@@ -7,12 +7,10 @@ export default class OrderSideBar extends PureComponent {
   state = { totalPrice: 0 }
   countTotalPrice = () => {
     const { items, itemsList } = this.props
-    let totalPrice = 0
-    itemsList.forEach(listItem => {
+    return itemsList.reduce((totalPrice, listItem) => {
       const itemPrice = items[listItem].price * items[listItem].amount
-      totalPrice += parseInt(itemPrice)
-    })
-    return totalPrice
+      return (totalPrice += parseInt(itemPrice))
+    }, 0)
   }
   componentDidMount() {
     this.setState({ totalPrice: this.countTotalPrice() })
