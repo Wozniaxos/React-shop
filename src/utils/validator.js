@@ -13,6 +13,7 @@ const _fields = {
     .string()
     .required()
     .min(8),
+  number: yup.number().required(),
 }
 
 const _buildSchema = field => {

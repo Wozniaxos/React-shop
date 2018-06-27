@@ -3,10 +3,10 @@ import { db } from '../firebase'
 
 export default class DeleteButton extends PureComponent {
   deleteItem = event => {
-    const { itemId, afterDelete, entity, afterDeleteParams } = this.props
+    const { item, afterDelete, entity, afterDeleteParams } = this.props
     db
       .destroy(entity, {
-        id: itemId,
+        id: item.id,
       })
       .then(() => afterDelete(afterDeleteParams))
     event.preventDefault()

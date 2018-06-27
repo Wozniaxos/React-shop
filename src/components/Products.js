@@ -11,7 +11,7 @@ import { setProducts } from '../store/products/actions'
 class Products extends Component {
   componentDidMount() {
     const { onSetProducts } = this.props
-    db.handleChangesFor('Product', snapshot => onSetProducts(snapshot.val() || {}))
+    db.fetchAndHandleChangesFor('Product', snapshot => onSetProducts(snapshot.val() || {}))
   }
 
   render() {
