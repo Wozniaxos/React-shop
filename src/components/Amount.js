@@ -5,9 +5,13 @@ export default class Amount extends PureComponent {
     const { amount, increase, decrease } = this.props
     return (
       <div className="amount">
-        <button onClick={decrease}> - </button>
+        <button className="decrease-button" onClick={decrease}>
+          -
+        </button>
         <p>{amount}</p>
-        <button onClick={increase}> + </button>
+        <button className="increase-button" onClick={increase}>
+          +
+        </button>
       </div>
     )
   }
