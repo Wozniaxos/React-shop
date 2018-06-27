@@ -3,7 +3,7 @@ import NavigationAuth from './NavigationAuth'
 import NavigationNonAuth from './NavigationNonAuth'
 import { connect } from 'react-redux'
 
-const Navigation = ({ authUser }) => (
+export const Navigation = ({ authUser }) => (
   <div> {authUser ? <NavigationAuth /> : <NavigationNonAuth />} </div>
 )
 
