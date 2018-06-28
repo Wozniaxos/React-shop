@@ -31,7 +31,7 @@ const response = {
 
 test('It calls handler for fetch users from db and call method to set users state with all users from db as payload', async () => {
   expect.assertions(4)
-  const handlerInitialLoadMock = jest.fn(() => new Promise(res => res(response)))
+  const handlerInitialLoadMock = jest.fn(async () => response)
   const onSetUsers = jest.fn()
 
   db.handleInitialLoadFor = handlerInitialLoadMock
@@ -49,7 +49,7 @@ test('It calls handler for fetch users from db and call method to set users stat
 })
 
 test('It render users list child when there is at least one user in props', async () => {
-  const handlerInitialLoadMock = jest.fn(() => new Promise(res => res(response)))
+  const handlerInitialLoadMock = jest.fn(async () => response)
   const onSetUsers = jest.fn()
 
   db.handleInitialLoadFor = handlerInitialLoadMock
@@ -59,7 +59,7 @@ test('It render users list child when there is at least one user in props', asyn
 })
 
 test('It doesnt render users list child when there is no user in props', async () => {
-  const handlerInitialLoadMock = jest.fn(() => new Promise(res => res(response)))
+  const handlerInitialLoadMock = jest.fn(async () => response)
   const onSetUsers = jest.fn()
 
   db.handleInitialLoadFor = handlerInitialLoadMock
