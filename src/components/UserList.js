@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const UserList = ({ users }) => (
-  <div>
+  <div className="user-list">
     <h2>List of Usernames of Users</h2>
     <p>(Saved on Sign Up in Firebase Database)</p>
 

@@ -7,7 +7,7 @@ import { db } from '../firebase'
 import { setUsers } from '../store/users/actions'
 import UserList from './UserList'
 
-class Users extends Component {
+export class Users extends Component {
   componentDidMount() {
     const { onSetUsers } = this.props
     db.handleInitialLoadFor('User').then(snapshot => onSetUsers(snapshot.val()))

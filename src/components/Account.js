@@ -6,7 +6,7 @@ import withAuthorization from './withAuthorization'
 import { connect } from 'react-redux'
 import { compose } from 'recompose'
 
-const AccountPage = ({ authUser }) => (
+export const AccountPage = ({ authUser }) => (
   <div>
     <h1>Account: {authUser.email}</h1>
     <PasswordForgetForm />
