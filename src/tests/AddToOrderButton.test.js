@@ -8,19 +8,16 @@ const item = {
   name: 'Product',
   price: 9,
 }
-
 const currentUser = {
   id: '1',
   username: 'terminator',
   email: 'terminator@killer.com',
 }
-
 const orderItems = {}
-
 const amount = 3
 
 test('Call create for order and 2 update methods (on user to add order and on order to ad item) when user doesnt have order yet', () => {
-  expect.assertions(6)
+  expect.assertions(8)
 
   const createOrderPayload = JSON.stringify({
     id: '666',
@@ -38,25 +35,17 @@ test('Call create for order and 2 update methods (on user to add order and on or
       },
     },
   })
-  const currentUserCopy = Object.assign({}, currentUser)
-  currentUserCopy['order'] = '666'
-
-  const updateUserPayload = JSON.stringify(currentUserCopy)
-
-  const mockedCreate = jest.fn((entity, payload) => {
-    expect(entity).toBe('Order')
-    expect(JSON.stringify(payload)).toBe(createOrderPayload)
-  })
-  const mockedUpdate = jest.fn((entity, payload) => {
-    entity === 'User'
-      ? expect(JSON.stringify(payload)).toBe(updateUserPayload)
-      : expect(JSON.stringify(payload)).toBe(updateOrderPayload)
-  })
+  const mockedCreate = jest.fn()
+  const mockedUpdate = jest.fn()
   const mockedInitializeKey = jest.fn(() => '666')
 
   db.create = mockedCreate
   db.update = mockedUpdate
   db.initializeKey = mockedInitializeKey
+
+  const currentUserCopy = Object.assign({}, currentUser)
+  currentUserCopy['order'] = '666'
+  const updateUserPayload = JSON.stringify(currentUserCopy)
 
   const addToOrderButton = shallow(
     <AddToOrderButton
@@ -69,6 +58,18 @@ test('Call create for order and 2 update methods (on user to add order and on or
   addToOrderButton.find('button').simulate('click', { preventDefault() {} })
   expect(mockedCreate.mock.calls.length).toBe(1)
   expect(mockedUpdate.mock.calls.length).toBe(2)
+
+  const createCall = mockedCreate.mock.calls[0]
+  expect(createCall[0]).toBe('Order')
+  expect(JSON.stringify(createCall[1])).toBe(createOrderPayload)
+
+  const firstUpdateCall = mockedUpdate.mock.calls[0]
+  expect(firstUpdateCall[0]).toBe('User')
+  expect(JSON.stringify(firstUpdateCall[1])).toBe(updateUserPayload)
+
+  const secondUpdateCall = mockedUpdate.mock.calls[1]
+  expect(secondUpdateCall[0]).toBe('Order')
+  expect(JSON.stringify(secondUpdateCall[1])).toBe(updateOrderPayload)
 })
 
 test('Call only one update method on order when user have order already', () => {
@@ -87,14 +88,12 @@ test('Call only one update method on order when user have order already', () => 
       },
     },
   })
-
   const mockedCreate = jest.fn()
-  const mockedUpdate = jest.fn((entity, payload) => {
-    expect(entity).toBe('Order')
-    expect(JSON.stringify(payload)).toBe(updateOrderPayload)
-  })
+  const mockedUpdate = jest.fn()
+
   db.create = mockedCreate
   db.update = mockedUpdate
+
   const addToOrderButton = shallow(
     <AddToOrderButton
       amount={amount}
@@ -106,4 +105,8 @@ test('Call only one update method on order when user have order already', () => 
   addToOrderButton.find('button').simulate('click', { preventDefault() {} })
   expect(mockedCreate.mock.calls.length).toBe(0)
   expect(mockedUpdate.mock.calls.length).toBe(1)
+
+  const updateCall = mockedUpdate.mock.calls[0]
+  expect(updateCall[0]).toBe('Order')
+  expect(JSON.stringify(updateCall[1])).toBe(updateOrderPayload)
 })

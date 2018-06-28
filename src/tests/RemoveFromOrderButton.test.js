@@ -27,11 +27,7 @@ test('Call update method on order with proper payload with removed particular it
       1: null,
     },
   })
-
-  const mockedUpdate = jest.fn((entity, payload) => {
-    expect(entity).toBe('Order')
-    expect(JSON.stringify(payload)).toBe(removeItemFromOrderPayload)
-  })
+  const mockedUpdate = jest.fn()
 
   db.update = mockedUpdate
 
@@ -40,4 +36,8 @@ test('Call update method on order with proper payload with removed particular it
   )
   removeFromOrderButton.find('button').simulate('click', { preventDefault() {} })
   expect(mockedUpdate.mock.calls.length).toBe(1)
+
+  const mockedUpdateCall = mockedUpdate.mock.calls[0]
+  expect(mockedUpdateCall[0]).toBe('Order')
+  expect(JSON.stringify(mockedUpdateCall[1])).toBe(removeItemFromOrderPayload)
 })
