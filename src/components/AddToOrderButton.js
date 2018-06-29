@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
 import { db } from '../firebase'
-import { connect } from 'react-redux'
 
 const createNewOrderIfNoExist = (user, newOrderKey) => {
   db.create('Order', {
@@ -27,7 +26,7 @@ const addItemToOrder = ({ currentUser, item, orderItems, newOrderKey, amount }) 
   db.update('Order', orderPayload)
 }
 
-class AddToOrderButton extends PureComponent {
+export default class AddToOrderButton extends PureComponent {
   addToOrder = event => {
     const { currentUser, item, orderItems, amount } = this.props
     if (!currentUser.order) {
@@ -43,10 +42,3 @@ class AddToOrderButton extends PureComponent {
     return <button onClick={this.addToOrder}> Add to order </button>
   }
 }
-
-const mapStateToProps = state => ({
-  currentUser: state.users.currentUser,
-  orderItems: state.order.orderItemsById,
-})
-
-export default connect(mapStateToProps)(AddToOrderButton)

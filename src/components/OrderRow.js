@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
-export default class Product extends PureComponent {
+export class OrderRow extends PureComponent {
   state = { amount: 1 }
   increaseAmount = () => {
     this.setState({ amount: this.state.amount + 1 })
@@ -13,34 +14,58 @@ export default class Product extends PureComponent {
     }
   }
   render() {
-    const { item, ButtonComponent, AmountComponent } = this.props
+    const { item, ButtonComponent, AmountComponent, currentUser, orderItems } = this.props
     const { amount } = this.state
     return (
       <div className="order-row">
         {AmountComponent ? (
           <div>
-            {item.name} {item.price} zł
+            <p className="row-item-info">
+              {item.name} {item.price} zł
+            </p>
             <AmountComponent
-              amount={this.state.amount}
+              amount={amount}
               decrease={this.decreaseAmount}
               increase={this.increaseAmount}
             />
           </div>
         ) : (
           <div>
-            {item.amount}x {item.name} {item.price} zł
+            <p className="row-item-info">
+              {item.amount}x {item.name} {item.price} zł
+            </p>
           </div>
         )}
-        <ButtonComponent amount={amount} item={item} />
+        <ButtonComponent
+          amount={amount}
+          currentUser={currentUser}
+          item={item}
+          orderItems={orderItems}
+        />
       </div>
     )
   }
 }
 
-Product.propTypes = {
+const mapStateToProps = state => ({
+  currentUser: state.users.currentUser,
+  orderItems: state.order.orderItemsById,
+})
+
+OrderRow.propTypes = {
   item: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
   }),
   ButtonComponent: PropTypes.func.isRequired,
   AmountComponent: PropTypes.func,
+  currentUser: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+  }),
+  orderItems: PropTypes.object.isRequired,
 }
+
+export default connect(mapStateToProps)(OrderRow)

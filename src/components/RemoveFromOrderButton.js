@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
 import { db } from '../firebase'
-import { connect } from 'react-redux'
 
 const removeItemFromOrder = (currentUser, item, currentItems) => {
   const orderId = currentUser['order']
@@ -12,7 +11,7 @@ const removeItemFromOrder = (currentUser, item, currentItems) => {
   db.update('Order', orderPayload)
 }
 
-class RemoveFromOrderButton extends PureComponent {
+export default class RemoveFromOrderButton extends PureComponent {
   removeFromOrder = event => {
     const { currentUser, item, orderItems } = this.props
 
@@ -23,10 +22,3 @@ class RemoveFromOrderButton extends PureComponent {
     return <button onClick={this.removeFromOrder}> Remove from order </button>
   }
 }
-
-const mapStateToProps = state => ({
-  currentUser: state.users.currentUser,
-  orderItems: state.order.orderItemsById,
-})
-
-export default connect(mapStateToProps)(RemoveFromOrderButton)
